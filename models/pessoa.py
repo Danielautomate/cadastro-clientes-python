@@ -5,10 +5,12 @@ from models.endereco import Endereco
 
 class Pessoa:
     
+    contador: int = 0
 
     def __init__(self, nome: str, data_nascimento: str, cpf:str, endereco: Endereco | None, cep: str, email: str) -> None:
-        
-        self.__id = Pessoa.contador
+        Pessoa.contador += 1
+
+        self.__codigo = Pessoa.contador
         self.__nome = nome
         self.__data_nascimento = data_nascimento
         self.__cpf = cpf
@@ -16,7 +18,7 @@ class Pessoa:
         self.__endereco = endereco
         self.__email = email
 
-        
+        self.__data_cadstro = date.today()
 
 
 # ======================
@@ -66,7 +68,7 @@ class Pessoa:
         self.__endereco = novo_endereco
     
     @property 
-    def data_cadastro(self):
+    def data_cadastro(self) -> date:
         return self.__data_cadastro
 
 

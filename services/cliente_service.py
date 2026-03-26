@@ -4,21 +4,22 @@ from models.endereco import Endereco
 from services.api_cep import busca_endereco_por_cep
 from utils.validar_cpf import validar_cpf
 
-from typing import List, Dict, Optional
+from typing import  Optional
 
 clientes: list[Pessoa] = []
 
 
-def criar_pessoa(dados):
+def criar_pessoa(dados) -> Pessoa:
 
     # validar CPF
     if not validar_cpf(dados["cpf"]):
         raise ValueError("CPF inválido")
-     # 🔥 verifica duplicidade
+    
+     # verifica duplicidade
     if buscar_cliente(dados["cpf"]):
         raise ValueError("CPF já cadastrado")
 
-    # buscar Enderço na Api
+    # Busca o endereço na API do ViaCEP
     endereco_api = busca_endereco_por_cep(dados["cep"])
     
     if not endereco_api:
@@ -27,10 +28,12 @@ def criar_pessoa(dados):
 
     # cria objeto Enderço
     endereco = Endereco(
-        endereco_api["logradouro"],
-        endereco_api["bairro"],
-        endereco_api["cidade"],
-        endereco_api["estado"]
+        cep=endereco_api["cep"],
+        rua=endereco_api["logradouro"],
+        numero=dados.get("numero", "S/N"),  
+        bairro=endereco_api["bairro"],
+        cidade=endereco_api["cidade"],
+        estado=endereco_api["estado"]
     )
 
     # cria obejeto Pessoa
@@ -48,37 +51,39 @@ def criar_pessoa(dados):
     return pessoa
 
 
-# ------------------------
-# Lista de cliente cadastrado
-# ------------------------
+# ==============================================================
+# LISTAR CLIENTES
+# ==============================================================
 
 def lista_cliente_cadastrado() -> None:
     if not clientes:
         print("Nenhum cliente cadastrado!")
         return
-
+    
+    print(f"\n{'='*50}")
     print(f"Total de clientes cadastrados: {len(clientes)}")
+    print(f"\n{'='*50}")
 
     for i, c in enumerate(clientes, start=1):
         print(f'Cliente {i}')
         print(c)
         print('---------------')
 
-# ------------------------
-# BUSCAR Cliente cadastrado por cpf 
-# ------------------------
+# ==============================================================
+# BUSCAR CLIENTE POR CPF
+# ==============================================================
 
 def buscar_cliente(cpf: str) -> Optional[Pessoa]:
-    for c in clientes:
-        if c.cpf == cpf:
-            return c
+    for cliente in clientes:
+        if cliente.cpf == cpf:
+            return clientes
     return None
 
 
 
-# ------------------------
-# Excluir Cliente
-# ------------------------
+# ==============================================================
+# EXCLUIR CLIENTE
+# ==============================================================
 
 def excluir_cliente(cpf: str) -> str:
     cliente = buscar_cliente(cpf)
@@ -87,4 +92,30 @@ def excluir_cliente(cpf: str) -> str:
         return "Cliente não encontrado"
     
     clientes.remove(cliente)
-    return "Cliente Removindo com sucesso"
+    return f"Cliente '{cliente.nome}' removido com sucesso."
+
+# ==============================================================
+# ATUALIZAR CLIENTE
+# ==============================================================
+
+def atualizar_cliente(cpf: str, dados: dict) -> str:
+    cliente = buscar_cliente(cpf)
+
+    if not cliente:
+        return "Cliente não encontrado."
+    
+
+    if dados.get("cep"):
+        endereco_api = busca_endereco_por_cep(dados["cep"])
+        novo_endereco = Endereco(
+            cep=endereco_api["cep"],
+            rua=endereco_api["logradouro"],
+            numero=dados.get("numero", "S/N"),
+            bairro=endereco_api["bairro"],
+            cidade=endereco_api["cidade"],
+            estado=endereco_api["estado"]
+        )
+        cliente.cep = dados["cep"]
+        cliente.endereco = novo_endereco
+
+    return f"Cliente '{cliente.nome}' atualizado com sucesso."
