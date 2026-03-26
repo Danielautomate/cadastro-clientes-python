@@ -1,4 +1,0 @@
-# 1. Criar o arquivo .gitignore
-echo "venv/" > .gitignore
-echo "__pycache__/" >> .gitignore
-echo "*.pyc" >> .gitignore
