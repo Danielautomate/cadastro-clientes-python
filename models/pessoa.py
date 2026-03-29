@@ -84,10 +84,12 @@ class Pessoa:
             endereco_str = str(self.__endereco)
 
         return (
-            f'Código: {self.codigo}\n'
-            f'Nome: {self.nome}\n'
-            f'Data de Nascimento: {self.data_nascimento}\n'
-            f'Cadastro: {self.data_cadastro}\n'
-            f'{endereco_str}'
+            f"Código:           {self.__codigo}\n"
+            f"Nome:             {self.__nome}\n"
+            f"CPF:              {self.__cpf}\n"
+            f"Data Nascimento:  {self.__data_nascimento}\n"
+            f"Email:            {self.__email}\n"
+            f"Data Cadastro:    {self.__data_cadastro}\n"
+            f"Endereço:         {endereco_str}\n"
         )
      

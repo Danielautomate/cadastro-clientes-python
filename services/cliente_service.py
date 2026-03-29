@@ -3,6 +3,7 @@ from models.endereco import Endereco
 
 from services.api_cep import busca_endereco_por_cep
 from utils.validar_cpf import validar_cpf
+from utils.validar_email import validar_email_dns
 
 from typing import  Optional
 
@@ -18,6 +19,9 @@ def criar_pessoa(dados) -> Pessoa:
      # verifica duplicidade
     if buscar_cliente(dados["cpf"]):
         raise ValueError("CPF já cadastrado")
+
+    #chamado esta validação antes que ja não gasta uma requisão HTTP s e o email esta errado no inicio
+    validar_email_dns(dados["email"])
 
     # Busca o endereço na API do ViaCEP
     endereco_api = busca_endereco_por_cep(dados["cep"])
