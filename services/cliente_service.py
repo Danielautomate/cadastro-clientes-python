@@ -109,6 +109,10 @@ def atualizar_cliente(cpf: str, dados: dict) -> str:
         return "Cliente não encontrado."
     
 
+    if dados.get("email"):
+        validar_email_dns(dados["email"])     # valida antes de salvar
+        cliente.email = dados["email"]    # setter chamado aqui
+
     if dados.get("cep"):
         endereco_api = busca_endereco_por_cep(dados["cep"])
         novo_endereco = Endereco(

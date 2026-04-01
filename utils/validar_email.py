@@ -6,7 +6,7 @@ PADRAO_EMAIL = re.compile(
 )
 
 def validar_email_dns(email:  str) -> bool:
-# Verifica se é uam string
+# Verifica se é uma string
     if not isinstance(email, str):
     
         raise TypeError("Email dev ser uma string")

@@ -18,7 +18,7 @@ class Pessoa:
         self.__endereco = endereco
         self.__email = email
 
-        self.__data_cadstro = date.today()
+        self.__data_cadastro = date.today()
 
 
 # ======================
