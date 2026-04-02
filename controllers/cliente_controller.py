@@ -1,6 +1,11 @@
 
-from services.cliente_service import(criar_pessoa, lista_cliente_cadastrado, buscar_cliente, 
-                                     excluir_cliente, atualizar_cliente)
+from services.cliente_service import (
+    criar_cliente,
+    lista_cliente_cadastrado,
+    buscar_cliente,
+    excluir_cliente,
+    atualizar_cliente,
+)
 
 # ==============================================================
 # CONTROLLER: CADASTRAR
@@ -36,7 +41,7 @@ def controller_cadastrar() -> None:
 
     #chama o service  passado o dicionario
 
-        cliente= criar_pessoa(dados)
+        cliente= criar_cliente(dados)
 
         print(f"\n✅ Cliente cadastrado com sucesso!")
         print(f"   Código: {cliente.codigo}")
@@ -132,10 +137,10 @@ def controller_atualizar() -> None:
 
 
         if not dados:
-            print("\ Nenhum dado informado. Nada foi alterado.")
+            print("\n⚠️  Nenhum dado informado. Nada foi alterado.")
             return
         mensagem = atualizar_cliente(cpf, dados)
-        print(f"\n {mensagem}")
+        print(f"\n✅ {mensagem}") 
 
     except ValueError as e:
         print(f"\n❌ Erro de validação: {e}")
@@ -164,8 +169,8 @@ def controller_excluir() -> None:
             print(f"\n Nenhum cliente encontrado com o CPF: {cpf}")
             return
 
-        print(f"\nCliente encontrado{cleinte.nome}")
-        confirmacao = input("Confimar exlusão? (s/n): ").strip().lower()
+        print(f"\nCliente encontrado: {cleinte.nome}")
+        confirmacao = input("Confimar exclusão? (s/n): ").strip().lower()
 
         if confirmacao == 's':
             mensagem = excluir_cliente(cpf)

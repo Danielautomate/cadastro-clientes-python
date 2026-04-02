@@ -1,16 +1,14 @@
 from models.pessoa import Pessoa
 from models.endereco import Endereco
-
 from services.api_cep import busca_endereco_por_cep
 from utils.validar_cpf import validar_cpf
-from utils.validar_email import validar_email_dns
-
-from typing import  Optional
+from utils.validar_email import validar_email
+from typing import Optional
 
 clientes: list[Pessoa] = []
 
 
-def criar_pessoa(dados) -> Pessoa:
+def criar_cliente(dados: dict) -> Pessoa:
 
     # validar CPF
     if not validar_cpf(dados["cpf"]):
@@ -21,15 +19,12 @@ def criar_pessoa(dados) -> Pessoa:
         raise ValueError("CPF já cadastrado")
 
     #chamado esta validação antes que ja não gasta uma requisão HTTP s e o email esta errado no inicio
-    validar_email_dns(dados["email"])
+    validar_email(dados["email"])
 
     # Busca o endereço na API do ViaCEP
     endereco_api = busca_endereco_por_cep(dados["cep"])
     
-    if not endereco_api:
-        raise ValueError("CEP inválido")
-
-
+  
     # cria objeto Enderço
     endereco = Endereco(
         cep=endereco_api["cep"],
@@ -80,7 +75,7 @@ def lista_cliente_cadastrado() -> None:
 def buscar_cliente(cpf: str) -> Optional[Pessoa]:
     for cliente in clientes:
         if cliente.cpf == cpf:
-            return clientes
+            return cliente
     return None
 
 
@@ -110,7 +105,7 @@ def atualizar_cliente(cpf: str, dados: dict) -> str:
     
 
     if dados.get("email"):
-        validar_email_dns(dados["email"])     # valida antes de salvar
+        validar_email(dados["email"])     # valida antes de salvar
         cliente.email = dados["email"]    # setter chamado aqui
 
     if dados.get("cep"):

@@ -5,11 +5,11 @@ PADRAO_EMAIL = re.compile(
     r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
 )
 
-def validar_email_dns(email:  str) -> bool:
+def validar_email(email:  str) -> bool:
 # Verifica se é uma string
     if not isinstance(email, str):
     
-        raise TypeError("Email dev ser uma string")
+        raise TypeError("Email deve ser uma string")
     
     #removendo os espaços
     email = email.strip()
@@ -18,7 +18,7 @@ def validar_email_dns(email:  str) -> bool:
         raise ValueError("Email não poder ser vazio")
     
     # valida o fromato primeiro com regex . porque não adianta consulta DNS se formato ja estive errado
-    if not PADRAO_EMAIL. match(email):
+    if not PADRAO_EMAIL.match(email):
         raise ValueError(f" Email com formato inválido: {email}")
 
 
@@ -44,10 +44,3 @@ def validar_email_dns(email:  str) -> bool:
         raise ConnectionError("Erro de conexão ao verificar domínio")
     
 
-d = "camila.santos56@gmail.com"
-
-try:
-    p = validar_email_dns(d)
-    print("Resultado:", p)
-except Exception as e:
-    print("Erro:", e)

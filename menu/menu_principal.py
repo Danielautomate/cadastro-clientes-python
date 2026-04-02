@@ -37,7 +37,7 @@ def executar_opcao(opcao: str) -> bool:
         opcoes[opcao]()
 
     else:
-        print("\n Opção inválida. Digite um número entre 0 e 5.")
+        print("\n⚠️  Opção inválida. Digite um número entre 0 e 5.")
 
     return True
 
@@ -49,4 +49,4 @@ def iniciar_menu() -> None:
         opcao = input("\nDigite a opção desejada: ").strip()
         continuar = executar_opcao(opcao)
     
-    print("\nSistema encerrado. Até logo! ")
+    print("\nSistema encerrado. Até logo! 👋")

@@ -8,6 +8,7 @@ class Pessoa:
     contador: int = 0
 
     def __init__(self, nome: str, data_nascimento: str, cpf:str, endereco: Endereco | None, cep: str, email: str) -> None:
+        
         Pessoa.contador += 1
 
         self.__codigo = Pessoa.contador
@@ -78,10 +79,7 @@ class Pessoa:
     
     def __str__(self) -> str:
 
-        endereco_str = ""
-
-        if self.__endereco:
-            endereco_str = str(self.__endereco)
+        endereco_str = str(self.__endereco) if self.__endereco else "Não informado"
 
         return (
             f"Código:           {self.__codigo}\n"

@@ -14,21 +14,21 @@ def busca_endereco_por_cep(cep: str) -> dict:
     try:
         url = f"https://viacep.com.br/ws/{cep}/json/"
 
-    # ------------------------------------------------------
-        # MELHORIA: timeout=5 define que se a API não responder
-        # em 5 segundos, lança uma exceção automaticamente.
-        # Sem timeout, o programa pode travar esperando para sempre.
-    # ------------------------------------------------------
+         # ------------------------------------------------------
+            # MELHORIA: timeout=5 define que se a API não responder
+            # em 5 segundos, lança uma exceção automaticamente.
+            # Sem timeout, o programa pode travar esperando para sempre.
+        # ------------------------------------------------------
        
         resposta = requests.get(url, timeout=5)
 
-    # ------------------------------------------------------
+        # ------------------------------------------------------
         # status_code é o código de resposta HTTP.
         # 200 = sucesso. Outros exemplos:
         #   404 = não encontrado
         #   500 = erro no servidor
         # Se não for 200, algo deu errado no servidor da API.
-    # ------------------------------------------------------
+        # ------------------------------------------------------
 
         if resposta.status_code != 200:
             raise Exception("Erro ao consultar a API de CEP")
@@ -40,9 +40,9 @@ def busca_endereco_por_cep(cep: str) -> dict:
         
         return{
             "cep": cep,
-            "logradouro": dados.get("logradouro"),
-            "bairro": dados.get("bairro"),
-            "cidade": dados.get("localidade"),
+            "logradouro": dados.get("logradouro", ""),
+            "bairro": dados.get("bairro", ""),
+            "cidade": dados.get("localidade",""),
             "estado": dados.get("uf"),
 
         }
@@ -54,4 +54,4 @@ def busca_endereco_por_cep(cep: str) -> dict:
         raise ConnectionError("Sem conexão com a internet")
 
     except requests.exceptions.RequestException:
-        raise ConnectionAbortedError("Erro de conexão com API de CEP")
+        raise ConnectionError("Erro de conexão com API de CEP")
